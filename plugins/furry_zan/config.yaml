@@ -1,0 +1,37 @@
+configs:
+
+  - key: enable_white_list_groups
+    type: bool
+    label: 启用群聊白名单
+    description: 开启后只有在白名单中的群聊才启用点赞功能
+    default: false
+
+  - key: white_list_groups
+    type: list
+    label: 群聊白名单
+    description: 只有在白名单中的群聊才启用点赞功能，留空则默认全部群聊可用
+    default: []
+
+  - key: auto_like_enabled
+    type: bool
+    label: 启用自动点赞
+    description: 是否启用每日自动点赞功能
+    default: true
+
+  - key: likes_per_user
+    type: string
+    label: 每人点赞次数
+    description: 每次给每个用户点赞的次数，填写数字（如 20）
+    default: "20"
+
+  - key: notify_groups
+    type: list
+    label: 通知群组列表
+    description: 自动点赞开始和完成时会发送通知到这些群号
+    default: []
+
+  - key: notify_delay
+    type: string
+    label: 通知发送延迟
+    description: 发送群通知之间的延迟时间（秒）。群通知为异步发送，此项保留仅为兼容原插件配置
+    default: "1"
