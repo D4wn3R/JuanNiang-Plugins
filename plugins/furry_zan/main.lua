@@ -294,7 +294,10 @@ local function like_single(user_id)
     local friendly = friendly_like_error(err)
     if friendly == "limit" then
       local limit_reply = pick(LIMIT_RESPONSES)
-      return limit_reply:gsub("{username}", username)
+      -- ⚠ 必须加括号截断：gsub 作为 return 尾值会多返回一个替换计数，
+      -- 上游 like_multiple 的 table.insert 会把计数误当位置参数而崩溃，
+      -- 导致 zanwo_date 写不进状态、每条群消息都重试自动点赞（20003 刷屏根因）
+      return (limit_reply:gsub("{username}", username))
     end
     return friendly
   end
@@ -399,10 +402,18 @@ local function execute_auto_like()
   send_notifications("🤖 开始执行自动点赞\n⏰ 时间: " .. now_str ..
     "\n👥 目标用户: " .. #valid .. " 人\n🔢 每人点赞: " .. per_user .. " 次")
 
-  local result = like_multiple(valid)
+  -- pcall 兜底：无论本轮是否异常都标记今日完成——否则每条群消息都会重试一整轮，
+  -- 额度已满时就是无意义的 20003 刷屏（曾经的事故）
+  local ok_round, result = pcall(like_multiple, valid)
 
   state.zanwo_date = today
   save_state()
+
+  if not ok_round then
+    jn.log.error("自动点赞轮次异常（已标记今日完成）: " .. tostring(result))
+    send_notifications("⚠️ 自动点赞本轮异常结束（已标记今日完成，明天再战）")
+    return
+  end
 
   send_notifications("✅ 自动点赞执行完成\n⏰ 时间: " .. now_str ..
     "\n👥 成功点赞: " .. #valid .. " 人\n🔢 每人点赞: " .. per_user ..
