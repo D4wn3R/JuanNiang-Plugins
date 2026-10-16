@@ -1,0 +1,11 @@
+name: furry_zan
+version: "1.0.1"
+author: Tichaos
+description: "(QQ)智能点赞：赞我、每日定时自动点赞、取消自动、黑名单管理。"
+entry: main.lua
+system: false
+enabled: true
+supports_cronjob: true
+permissions:
+  - onebot11
+  - file
