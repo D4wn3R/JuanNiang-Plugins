@@ -7,81 +7,88 @@ math.randomseed(os.time())
 -- 回复语料（沿用原插件）
 -- ----------------------------------------------------------------------------
 local SUCCESS_RESPONSES = {
-  "👍{total_likes}", "点赞完成，本蛙收工",
-  "给{username}点了{total_likes}个赞，查收", "{total_likes}个赞已从奶蛙大肚皮发出",
-  "为{username}点赞成功，本蛙手指头立功了", "点了{total_likes}个，没到账就是被风控了，不怪本蛙",
-  "✨ {total_likes}个赞已到账", "叮咚，{total_likes}个赞已送达{username}",
-  "赞力全开，本蛙给{username}送了{total_likes}个赞", "biu，{total_likes}个赞从大肚皮里发射成功",
-  "{username}的赞+{total_likes}，恭喜被本蛙收编", "一口气点了{total_likes}个，本蛙先笑为敬",
-  "今日份的{total_likes}个赞已安排", "赞不完，根本赞不完，本蛙又点了{total_likes}个",
-  "本蛙给{username}狂点{total_likes}个赞", "{total_likes}个赞已送达，万物收束于大笑",
-  "本蛙又给{username}点了{total_likes}个", "今日{total_likes}个赞已从奶蛙肚皮送出",
-  "赞已到账，{username}可以开始膨胀了", "{total_likes}连赞，赛博森林标准礼仪",
+  "👍{total_likes}", "赞了赞了", "点赞成功！",
+  "给{username}点了{total_likes}个赞", "赞送出去啦！一共{total_likes}个哦！",
+  "为{username}点赞成功！总共{total_likes}个！", "点了{total_likes}个，快查收吧！",
+  "赞已送达，请注意查收~ 一共{total_likes}个！", "给{username}点了{total_likes}个赞，记得回赞哟！",
+  "赞了{total_likes}次，看看收到没？", "点了{total_likes}赞，没收到可能是我被风控了",
+  "✨ {total_likes}个赞已到账，请查收~", "叮咚！{total_likes}个赞已送达{username}",
+  "赞力全开！给{username}送了{total_likes}个赞", "biu~ {total_likes}个赞发射成功！",
+  "{username}的赞+{total_likes}，声望提升！", "赞赞赞！一口气点了{total_likes}个",
+  "今日份的{total_likes}个赞已安排~", "赞不完，根本赞不完！又点了{total_likes}个",
+  "赞气满满！{total_likes}个赞请收好", "赞力觉醒！给{username}狂点{total_likes}个赞",
+  "赞到成功！{total_likes}个赞已送达", "赞不绝口！又给{username}点了{total_likes}个",
+  "赞力爆棚！今日{total_likes}个赞已送出",
 }
 
 local LIMIT_RESPONSES = {
-  "今天给{username}的赞已达上限，本蛙手指头进入保护模式", "赞了那么多还不够，本蛙肚皮都空了", "{username}别太贪心",
-  "今天赞过了", "已经赞过了，本蛙有记录", "今日额度用完，本蛙收工",
-  "还想要赞，本蛙的赞库今日打烊", "今日赞力已耗尽，明天再来", "{username}今天已经收获满满",
-  "本蛙明天再战", "今日点赞任务已完成，本蛙去消化账目", "今日份的赞已经给过{username}",
-  "{username}今天已经被赞爆", "赞力CD中，本蛙在充能", "今日点赞额度已用完",
-  "{username}今天太受欢迎，本蛙排不上号", "本蛙大肚皮启动保护机制", "今日点赞成就已达成，本蛙宣布收工",
-  "一人一天一份，本蛙按规矩办事", "点赞冷却中，明天同一时间见",
+  "今天给{username}的赞已达上限", "赞了那么多还不够吗？", "{username}别太贪心哟~",
+  "今天赞过啦！", "今天已经赞过啦~", "已经赞过啦~", "还想要赞？不给了！",
+  "已经赞过啦，别再点啦！", "今日赞力已耗尽，明天再来吧~", "{username}今天已经收获满满啦！",
+  "赞力不足，请明日再战！", "今日点赞任务已完成✓", "赞力恢复中，请稍后再试",
+  "今日份的赞已经给{username}啦", "赞力有限，明天继续哦~", "{username}今天已经被赞爆啦！",
+  "赞力CD中，请耐心等待", "今日点赞额度已用完", "赞力值归零，需要重新充能",
+  "{username}今天太受欢迎啦！", "赞力过载，系统保护启动", "今日点赞成就已达成！",
 }
 
 local ALREADY_SUBSCRIBED_RESPONSES = {
-  "你已经开启自动点赞，本蛙有记录", "别急，名单里有你了", "自动状态正常，坐等本蛙送赞",
-  "已经安排上了", "自动成功，就等时间到", "别重复提交，本蛙的账本不收重复条目",
-  "已经在自动名单中", "自动状态：已开启", "早就给你安排了自动点赞",
-  "自动点赞服务运行中，本蛙随时待命", "已经在名单里躺着了", "无需重复操作，本蛙记性很好",
-  "早就把你加入了本蛙的名单", "自动点赞已激活，无需重复", "已经在队列里排队",
-  "自动服务正常运行，本蛙从不摸鱼", "早就设置好了", "自动状态：在线等赞",
-  "本蛙的账本里已经有你", "自动点赞就绪，等待执行", "自动状态：待机中，一叫就醒",
+  "你已经自动点赞了哦~", "别急嘛，已经给你自动了~", "自动状态正常，坐等收赞吧！",
+  "已经安排上啦，等着收赞吧~", "自动成功，就等时间到啦！", "别重复自动啦，已经在名单里了~",
+  "已经在自动名单中啦！", "自动状态：已开启 ✓", "早就给你安排上自动点赞啦~",
+  "自动点赞服务运行中...", "已经在自动名单里躺平啦~", "自动状态良好，无需重复操作",
+  "早就把你加入自动名单啦！", "自动点赞已激活，无需重复", "已经在自动队列中啦~",
+  "自动服务正常运行中", "早就给你设置好啦！", "自动状态：在线等赞",
+  "已经在自动名单里啦~", "自动点赞已就绪，等待执行", "早就安排上自动点赞啦！",
+  "自动状态：待机中",
 }
 
 local SUBSCRIBE_SUCCESS_RESPONSES = {
-  "收到，每天{time}准时点赞{count}次，本蛙说到做到", "安排了，{time}开始点赞{count}次", "搞定，{time}自动点赞{count}次",
-  "已记录，{time}执行{count}次，本蛙账本+1", "自动设置完成，{time}给你点{count}个赞",
-  "自动成功，{time}收{count}个赞", "自动点赞已开启，{time}执行{count}次",
-  "设置成功，每天{time}本蛙送{count}个赞", "已排期，{time}开始{count}次",
-  "已加入日程，{time}自动点赞{count}次，欢迎加入奶家军", "提醒设置成功，{time}点赞{count}次",
-  "自动点赞激活，{time}执行{count}次", "已入名单，{time}点赞{count}次，你被本蛙收编了",
-  "自动点赞已部署，{time}开始{count}次", "设置完成，{time}本蛙送{count}个赞",
-  "礼包已激活，{time}发放{count}次", "未来已安排，{time}点赞{count}次",
-  "自动服务开启，{time}执行{count}次", "{time}本蛙准时送{count}次，雷打不动",
-  "自动点赞冠军已诞生，{time}执行{count}次",
+  "听到了！每天{time}准时给你点赞{count}次~", "安排上了！{time}开始点赞{count}次",
+  "搞定！{time}自动点赞{count}次", "已经记住了，{time}执行{count}次",
+  "自动设置完成！{time}给你点{count}个赞", "自动成功！坐等{time}收{count}个赞吧",
+  "自动点赞已开启！{time}执行{count}次", "设置成功！每天{time}给你送{count}个赞",
+  "自动点赞安排妥当！{time}开始{count}次", "已加入日程！{time}自动点赞{count}次",
+  "提醒设置成功！{time}点赞{count}次", "自动点赞激活！{time}执行{count}次",
+  "成功加入自动名单！{time}点赞{count}次", "自动点赞已部署！{time}开始{count}次",
+  "设置完成！{time}自动送{count}个赞", "自动点赞礼包已激活！{time}发放{count}次",
+  "未来已安排！{time}点赞{count}次", "自动服务开启！{time}执行{count}次",
+  "魔法生效！{time}自动点赞{count}次", "自动点赞马戏团开演！{time}表演{count}次",
+  "自动点赞冠军已诞生！{time}执行{count}次", "摇滚起来！{time}自动点赞{count}次",
 }
 
 local UNSUBSCRIBE_RESPONSES = {
-  "✅ 取消自动成功，本蛙把你从账本划掉了", "已取消自动，以后不给你点赞了", "取消成功，本蛙不再自动点赞",
-  "已经删除你的信息，本蛙顺手把这一页撕了", "自动已取消，需要时再叫本蛙", "自动点赞已关闭",
-  "已退出，本蛙不留备份", "自动服务已终止", "已退出本蛙的自动点赞计划",
-  "自动锁定已解除，万物收束于大笑", "自动点赞气球已放飞", "自动服务日落西山，本蛙去睡觉",
-  "自动点赞已停止", "自动服务进入休眠，本蛙也是", "自动点赞已关机，本蛙去揉肚皮",
+  "✅ 取消自动成功", "已取消自动，不再给你点赞啦", "取消成功，以后不给你点赞了",
+  "已经删除了你的信息哦", "自动已取消，需要时再叫我~", "自动点赞已关闭",
+  "取消成功，不再自动点赞", "自动服务已终止", "已退出自动点赞计划",
+  "自动锁定已解除", "自动点赞气球已放飞", "自动服务日落西山",
+  "自动点赞已停止", "自动服务进入休眠", "自动点赞已关机",
   "已取消自动点赞目标", "自动点赞锚已收起", "自动点赞浪潮已退去",
-  "自动点赞马戏团已散场", "自动服务到此结束，本蛙挥手", "自动点赞竞赛已完结，本蛙宣布散会",
+  "自动点赞马戏团已散场", "自动服务到此结束", "自动点赞竞赛已完结",
+  "自动点赞魔法已解除",
 }
 
 local NOT_FRIEND_RESPONSES = {
-  "自动失败，请先加本蛙为好友", "先成为本蛙好友，才能自动点赞", "先加好友，不然没法自动",
-  "先加个好友，本蛙很好说话", "成为好友才能开启自动服务", "目标锁定失败，请先加好友",
-  "好友之门尚未开启，本蛙进不去", "成为好友，本蛙点赞更轻松", "提示：请先加本蛙为好友",
-  "成为好友，解锁本蛙的自动点赞", "好友关系是自动点赞的前提", "加个好友，点赞更精彩",
-  "成为好友，开启和本蛙的点赞之旅", "好友认证是自动点赞的钥匙", "本蛙提示：请先建立好友关系",
-  "先加本蛙好友，再谈点赞", "成为好友，和本蛙争夺点赞冠军", "规则：先加好友，再看本蛙表演",
-  "建议：加个本蛙好友更方便", "成为好友，点亮本蛙的自动点赞", "规则：好友才能自动",
-  "请先添加本蛙为好友",
+  "自动失败，请先加我为好友哦~", "要先成为好友才能自动点赞呢", "加个好友先吧，不然没法自动",
+  "咱们先加个好友呗~", "成为好友才能开启自动服务", "目标锁定失败，请先加好友",
+  "好友之门尚未开启", "成为好友，点赞更轻松", "友情提示：请先加为好友",
+  "成为好友解锁自动点赞", "好友关系是自动点赞的前提", "加个好友，点赞更精彩",
+  "成为好友，开启点赞之旅", "好友认证是自动点赞的钥匙", "魔法提示：请先建立好友关系",
+  "摇滚起来！先加个好友吧", "成为好友，争夺点赞冠军", "马戏团规则：先加好友再表演",
+  "友情建议：加个好友更方便", "成为好友，点亮自动点赞", "游戏规则：好友才能自动",
+  "系统提示：请先添加好友",
 }
 
 local BLACKLIST_RESPONSES = {
-  "❌ 你在黑名单中，本蛙不能给你点赞", "🚫 黑名单用户禁止使用本蛙的功能", "⛔ 你在黑名单中，本蛙爱莫能助",
-  "🔒 黑名单限制，请联系管理员，本蛙做不了主", "🚷 禁止访问：你在本蛙的黑名单中", "⚡ 权限被拒绝：黑名单用户",
-  "🛑 操作被阻止，本蛙拒绝执行", "⏸️ 暂停服务：你在黑名单中", "🔐 访问受限：黑名单用户",
-  "🚨 安全警告：黑名单用户禁止操作", "🎭 你在黑名单中，本蛙帮不了", "💢 黑名单用户还想点赞，本蛙当场表演一个装死",
-  "😤 黑名单用户禁止使用本蛙的功能", "🚯 黑名单用户请勿操作", "📵 权限不足：黑名单用户，本蛙管不了",
-  "🔞 不是年龄问题，是你在黑名单里", "🧱 你被本蛙的墙挡住了", "⚖️ 裁决：黑名单用户禁止",
-  "🧯 本蛙已拦截你的操作", "🪤 黑名单用户被本蛙逮个正着", "🔨 黑名单用户已被本蛙处理",
-  "🗑️ 黑名单用户请左转离开",
+  "❌ 你在黑名单中，无法使用点赞功能", "🚫 黑名单用户禁止使用本插件",
+  "⛔ 抱歉，你在黑名单中，无法点赞", "🔒 黑名单限制，请联系管理员",
+  "🚷 禁止访问：你在黑名单中", "⚡ 权限被拒绝：你在黑名单中",
+  "🛑 操作被阻止：你在黑名单中", "⏸️ 暂停服务：你在黑名单中",
+  "🔐 访问受限：黑名单用户", "🚨 安全警告：黑名单用户禁止操作",
+  "🎭 不好意思，你在黑名单中哦", "💢 黑名单用户还想点赞？想得美！",
+  "😤 黑名单用户禁止使用此功能", "🚯 黑名单用户请勿操作", "📵 权限不足：黑名单用户",
+  "🔞 年龄不够？不，是黑名单！", "🧱 你被墙了，黑名单用户",
+  "⚖️ 公正裁决：黑名单用户禁止", "🧯 紧急阻止：黑名单用户操作",
+  "🪤 触发陷阱：黑名单用户", "🔨 黑名单用户被锤了", "🗑️ 黑名单用户请左转离开",
 }
 
 -- ----------------------------------------------------------------------------
@@ -240,68 +247,29 @@ local function get_username(user_id)
   return "未知用户"
 end
 
--- 把适配器原始错误翻译成用户看得懂的话（绝不暴露 retcode 等技术细节）。
--- OneBot 失败响应的真实原因在 msg= 之后（如「由于对方权限设置，点赞失败」）；
--- 返回 "limit" 表示额度类（调用方改走赞满语料）。
-local function friendly_like_error(err)
-  local e = tostring(err or "")
-  if e == "" then return "暂时没赞成，稍后再试一次吧" end
-  local msg = e:match("msg=(.+)$")
-  local reason = (msg and msg ~= "") and msg or ""
-  if reason:find("对方权限") or reason:find("权限设置") then
-    return "对方隐私设置不允许被赞（需要互为好友，或对方开启陌生人点赞）"
-  end
-  if reason:find("已达") or reason:find("上限") or reason:find("今日")
-    or reason:find("次数") or reason:find("频繁")
-    or reason:find("quota") or reason:find("limit") then
-    return "limit"
-  end
-  if reason:find("权限") or reason:find("陌生人") or reason:find("好友") then
-    return "点赞权限受限：需要互为好友，或双方开启陌生人点赞"
-  end
-  if e:find("no active connection") or e:find("connection") or e:find("timeout") then
-    return "网络开小差了，稍后再试一次"
-  end
-  if reason ~= "" then
-    return "暂时没赞成：" .. reason
-  end
-  return "暂时没赞成，稍后再试一次吧"
-end
-
 -- 给单个用户点赞，返回回复文案
--- 结果区分三种：全部成功 / 部分成功（今日额度用满）/ 失败（赞满、权限、其它错误），
--- 每种都有用户看得懂的回复，不暴露错误码。
 local function like_single(user_id)
-  local per_user = cfg_num("likes_per_user", 10)
-  if per_user < 1 then per_user = 10 end
+  local per_user = cfg_num("likes_per_user", 20)
+  if per_user < 1 then per_user = 20 end
   local sent, err = send_likes(user_id, per_user)
   local username = get_username(user_id)
   if sent > 0 then
     local reply = pick(SUCCESS_RESPONSES)
     reply = reply:gsub("{total_likes}", tostring(sent))
     reply = reply:gsub("{username}", username)
-    if err then
-      local friendly = friendly_like_error(err)
-      if friendly == "limit" then
-        -- 部分成功：已赞的报数，同时说明额度用满
-        return reply .. "\n❗ 今日给 " .. username .. " 的赞已达上限（本次实际 +"
-          .. sent .. "），明天再来吧"
-      end
-    end
     return reply
   end
   if err then
-    local friendly = friendly_like_error(err)
-    if friendly == "limit" then
-      local limit_reply = pick(LIMIT_RESPONSES)
-      -- ⚠ 必须加括号截断：gsub 作为 return 尾值会多返回一个替换计数，
-      -- 上游 like_multiple 的 table.insert 会把计数误当位置参数而崩溃，
-      -- 导致 zanwo_date 写不进状态、每条群消息都重试自动点赞（20003 刷屏根因）
-      return (limit_reply:gsub("{username}", username))
+    local limit_reply = pick(LIMIT_RESPONSES)
+    if err:find("已达") then
+      return limit_reply:gsub("{username}", username)
     end
-    return friendly
+    if err:find("权限") then
+      return "点赞权限受限，你好像没开陌生人点赞"
+    end
+    return "点赞失败: " .. err
   end
-  return "暂时没赞成，稍后再试一次吧"
+  return "点赞失败"
 end
 
 -- 给多个用户点赞，返回多行回复
@@ -402,18 +370,10 @@ local function execute_auto_like()
   send_notifications("🤖 开始执行自动点赞\n⏰ 时间: " .. now_str ..
     "\n👥 目标用户: " .. #valid .. " 人\n🔢 每人点赞: " .. per_user .. " 次")
 
-  -- pcall 兜底：无论本轮是否异常都标记今日完成——否则每条群消息都会重试一整轮，
-  -- 额度已满时就是无意义的 20003 刷屏（曾经的事故）
-  local ok_round, result = pcall(like_multiple, valid)
+  local result = like_multiple(valid)
 
   state.zanwo_date = today
   save_state()
-
-  if not ok_round then
-    jn.log.error("自动点赞轮次异常（已标记今日完成）: " .. tostring(result))
-    send_notifications("⚠️ 自动点赞本轮异常结束（已标记今日完成，明天再战）")
-    return
-  end
 
   send_notifications("✅ 自动点赞执行完成\n⏰ 时间: " .. now_str ..
     "\n👥 成功点赞: " .. #valid .. " 人\n🔢 每人点赞: " .. per_user ..
@@ -479,7 +439,7 @@ end
 local function handle_unsubscribe(event)
   local uid = tostring(event.user_id)
   if not contains(state.subscribed_users, uid) then
-    return "你还没有开启自动点赞"
+    return "你还没有开启自动点赞哦~"
   end
   for i, v in ipairs(state.subscribed_users) do
     if v == uid then
@@ -783,4 +743,4 @@ if not ok_init then
   jn.log.error("启动时自动点赞检查失败: " .. tostring(err_init))
 end
 
-jn.log.info("[furry_zan] 奶蛙点赞插件已加载（移植自 astrbot_plugin_furry_zan v1.3.0）")
+jn.log.info("爱点赞插件加载完成（移植自 astrbot_plugin_furry_zan v1.3.0）")
