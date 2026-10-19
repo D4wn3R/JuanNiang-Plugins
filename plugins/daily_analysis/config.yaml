@@ -1,0 +1,91 @@
+configs:
+  - key: target_groups
+    type: list
+    label: "总结群列表"
+    description: "参与每日分析与消息收集的目标群聊列表（在后台添加/删除群号）"
+    default:
+      - "641370366"
+      - "822169910"
+  - key: text_provider_id
+    type: string
+    label: "指定总结文本模型"
+    description: "留空默认使用系统当前激活的文本模型；也可直接输入后台服务商名称（如 volcengine 或 qianfan）或模型名称（如 deepseek-v4.1-flash），支持模糊匹配，无需查抄UUID"
+    default: ""
+
+  - key: auto_analysis_time
+    type: string
+    label: "每日总结时间"
+    description: "每日自动触发分析的时间点（HH:MM 格式，例如 23:00），将总结此前 24 小时的群聊记录"
+    default: "23:00"
+
+  - key: retention_days
+    type: string
+    label: "消息保留天数"
+    description: "本地数据库历史消息保留天数，分析完成后自动清理过期记录（默认7天，可设3-30天）"
+    default: "7"
+
+  - key: max_topics
+    type: string
+    label: "核心话题提取数"
+    description: "分析报告中显示的最大话题数量（-1 表示不限，0 表示关闭话题分析）"
+    default: "5"
+
+  - key: max_golden_quotes
+    type: string
+    label: "群圣经/高光金句数"
+    description: "分析报告中显示的最大金句数量（-1 表示不限，0 表示关闭金句分析）"
+    default: "5"
+
+  - key: max_user_titles
+    type: string
+    label: "群友特色头衔数"
+    description: "分析报告中评选出的活跃群友头衔数量（-1 表示不限，0 表示关闭头衔画像）"
+    default: "6"
+
+  - key: max_critiques
+    type: string
+    label: "聊天质量分析维度数"
+    description: "聊天质量划分为几个维度进行剖析（-1 表示不限，0 表示关闭质量点评板块）"
+    default: "4"
+
+  - key: use_bot_persona
+    type: string
+    label: "使用Bot人设总结"
+    description: "是否使用Bot自身人格设定进行总结与点评：deep(深度还原Bot人设口癖与性格)、mild(温和幽默调侃)、none(纯客观中立不带人设)"
+    default: "deep"
+
+  - key: filter_bot_messages
+    type: bool
+    label: "过滤机器人自身发言"
+    description: "开启后机器人自身的回复消息不纳入总结分析，避免死循环自我总结"
+    default: true
+
+  - key: enable_progress_feedback
+    type: bool
+    label: "启用生成进度提示"
+    description: "开启后在生成分析时会发送「正在生成分析中」的提示，关闭则完全静默仅发送最终转发"
+    default: false
+
+  - key: custom_sender_name
+    type: string
+    label: "转发卡片展示昵称"
+    description: "合并转发卡片内各消息节点展示的自定义昵称"
+    default: "奶蛙·群聊日报"
+
+  - key: manual_trigger
+    type: bool
+    label: "立即触发一次总结"
+    description: "保存配置时若打开此开关，将立即异步触发一次群总结，执行后自动重置为关"
+    default: false
+
+  - key: manual_target_group
+    type: string
+    label: "立即触发目标群号"
+    description: "立即触发时要总结的群号（留空则总结上方群列表中的所有群）"
+    default: ""
+
+  - key: manual_send_target
+    type: string
+    label: "立即触发发送目标"
+    description: "总结结果发送的目标群号或好友QQ号（留空则发回被总结群本身）"
+    default: ""
